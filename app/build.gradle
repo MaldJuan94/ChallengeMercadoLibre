@@ -1,0 +1,95 @@
+apply plugin: "com.android.application"
+apply plugin: "androidx.navigation.safeargs"
+apply plugin: "kotlin-parcelize"
+apply from: "../commons.gradle"
+
+def VERSION_NAME = "1.0.0"
+def VERSION_CODE_DEV = 1
+def VERSION_CODE_QA = 1
+def VERSION_CODE_MASTER = 1
+
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+android {
+    signingConfigs {
+        release {
+            storeFile rootProject.file("fastlane/CarullaProd.keystore")
+            storePassword keystoreProperties["KEYSTORE_PASSWORD"]
+            keyAlias keystoreProperties["KEYSTORE_ALIAS_NAME"]
+            keyPassword keystoreProperties["KEYSTORE_KEY_PASSWORD"]
+        }
+    }
+
+    defaultConfig {
+        applicationId "com.mercadolibre.app"
+    }
+
+    flavorDimensions "enviroment"
+
+    productFlavors {
+        develop {
+            versionName VERSION_NAME
+            dimension = "enviroment"
+            applicationId = "com.mercadolibre.dev"
+            versionCode = VERSION_CODE_DEV
+            manifestPlaceholders = [manifestApplicationId: "${applicationId}"]
+            signingConfig signingConfigs.debug
+            buildConfigField "String", "API_MERCADO_LIBRE", '""'
+        }
+        qa {
+            versionName VERSION_NAME
+            dimension = "enviroment"
+            applicationId = "com.mercadolibre.qa"
+            versionCode = VERSION_CODE_QA
+            manifestPlaceholders = [manifestApplicationId: "${applicationId}"]
+            signingConfig signingConfigs.release
+            buildConfigField "String", "API_MERCADO_LIBRE", '""'
+        }
+
+        master {
+            versionName VERSION_NAME
+            dimension = "enviroment"
+            applicationId = "com.mercadolibre.app"
+            versionCode VERSION_CODE_MASTER
+            manifestPlaceholders = [manifestApplicationId: "${applicationId}"]
+            signingConfig signingConfigs.release
+            buildConfigField "String", "API_MERCADO_LIBRE", '""'
+        }
+    }
+}
+
+configurations.all {
+    resolutionStrategy {
+        force "androidx.appcompat:appcompat:1.4.2"
+    }
+}
+
+dependencies {
+    kapt("com.android.databinding:compiler:3.5.0")
+
+    implementation("androidx.appcompat:appcompat:1.4.2")
+    implementation("com.google.android.material:material:1.6.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
+    implementation("androidx.recyclerview:recyclerview:1.2.1")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.1")
+
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.4.2")
+    implementation("androidx.navigation:navigation-ui-ktx:2.4.2")
+    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.4.2")
+    implementation("androidx.navigation:navigation-ui-ktx:2.4.2")
+
+    //Glide
+    implementation("com.github.bumptech.glide:glide:4.11.0")
+    kapt("com.github.bumptech.glide:compiler:4.11.0")
+    implementation("com.caverock:androidsvg:1.2.1")
+
+    implementation("com.airbnb.android:lottie:$lottie_version")
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
+    implementation("com.alexvasilkov:gesture-views:2.6.0")
+    implementation("me.grantland:autofittextview:0.2.1")
+}
