@@ -2,7 +2,8 @@ apply plugin: "com.android.library"
 apply from: "../commons.gradle"
 
 dependencies {
-    implementation project(path: ":common")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.1")
+    implementation project(Modules.common)
+
+    implementation AndroidLibraries.lifecycleRunTime
+    implementation AndroidLibraries.lifecycleLiveData
 }

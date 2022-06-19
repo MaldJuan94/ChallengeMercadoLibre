@@ -1,0 +1,30 @@
+apply plugin: 'com.android.library'
+apply from: '../commons.gradle'
+
+android {
+    defaultConfig {
+        consumerProguardFiles 'consumer-rules.pro'
+        Properties properties = new Properties()
+        if (project.rootProject.file('services.properties').canRead())
+            properties.load(new FileInputStream(project.rootProject.file('services.properties')))
+        else throw new GradleException("Could not read services.properties!")
+        buildConfigField("String", "API_KEY", properties["API_KEY"])
+    }
+}
+
+dependencies {
+    implementation project(Modules.domain)
+    implementation project(Modules.common)
+
+    implementation Libraries.retrofit
+    api Libraries.retrofitMoshiConverter
+    api Libraries.httpLoggingInterceptor
+    implementation Libraries.okhttp
+
+    implementation AndroidLibraries.lifecycleViewModel
+    implementation AndroidLibraries.lifecycleExtensions
+    implementation AndroidLibraries.lifecycleLiveData
+
+    implementation Libraries.moshiKotlin
+    kapt Libraries.moshiKotlinCodegen
+}

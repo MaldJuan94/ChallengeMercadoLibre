@@ -3,6 +3,12 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.8">
       <module name="ChallengeMercadoLibre.app" target="11" />
+      <module name="ChallengeMercadoLibre.buildSrc" target="11" />
+      <module name="ChallengeMercadoLibre.buildsrc" target="11" />
+      <module name="ChallengeMercadoLibre.buildSrc.main" target="11" />
+      <module name="ChallengeMercadoLibre.buildsrc.main" target="11" />
+      <module name="ChallengeMercadoLibre.buildsrc.test" target="11" />
+      <module name="ChallengeMercadoLibre.buildSrc.test" target="11" />
       <module name="ChallengeMercadoLibre.data" target="11" />
       <module name="ChallengeMercadoLibre.domain" target="11" />
     </bytecodeTargetLevel>

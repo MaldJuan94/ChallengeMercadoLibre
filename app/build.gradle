@@ -3,11 +3,6 @@ apply plugin: "androidx.navigation.safeargs"
 apply plugin: "kotlin-parcelize"
 apply from: "../commons.gradle"
 
-def VERSION_NAME = "1.0.0"
-def VERSION_CODE_DEV = 1
-def VERSION_CODE_QA = 1
-def VERSION_CODE_MASTER = 1
-
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
@@ -22,37 +17,45 @@ android {
         }
     }
 
-    defaultConfig {
-        applicationId "com.mercadolibre.app"
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+        }
+
+        debug {
+            minifyEnabled false
+            shrinkResources false
+        }
     }
 
     flavorDimensions "enviroment"
 
     productFlavors {
         develop {
-            versionName VERSION_NAME
+            versionName Releases.versionName
             dimension = "enviroment"
-            applicationId = "com.mercadolibre.dev"
-            versionCode = VERSION_CODE_DEV
+            applicationId = ApplicationIdentifier.idDev
+            versionCode = Releases.versionCodeDev
             manifestPlaceholders = [manifestApplicationId: "${applicationId}"]
             signingConfig signingConfigs.debug
             buildConfigField "String", "API_MERCADO_LIBRE", '""'
         }
         qa {
-            versionName VERSION_NAME
+            versionName Releases.versionName
             dimension = "enviroment"
-            applicationId = "com.mercadolibre.qa"
-            versionCode = VERSION_CODE_QA
+            applicationId = ApplicationIdentifier.idQA
+            versionCode = Releases.versionCodeQa
             manifestPlaceholders = [manifestApplicationId: "${applicationId}"]
             signingConfig signingConfigs.release
             buildConfigField "String", "API_MERCADO_LIBRE", '""'
         }
 
         master {
-            versionName VERSION_NAME
+            versionName Releases.versionName
             dimension = "enviroment"
-            applicationId = "com.mercadolibre.app"
-            versionCode VERSION_CODE_MASTER
+            applicationId = ApplicationIdentifier.id
+            versionCode Releases.versionCodeMaster
             manifestPlaceholders = [manifestApplicationId: "${applicationId}"]
             signingConfig signingConfigs.release
             buildConfigField "String", "API_MERCADO_LIBRE", '""'
@@ -62,34 +65,31 @@ android {
 
 configurations.all {
     resolutionStrategy {
-        force "androidx.appcompat:appcompat:1.4.2"
+        force AndroidLibraries.appcompat
     }
 }
 
 dependencies {
-    kapt("com.android.databinding:compiler:3.5.0")
+    implementation project(Modules.common)
 
-    implementation("androidx.appcompat:appcompat:1.4.2")
-    implementation("com.google.android.material:material:1.6.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
-    implementation("androidx.recyclerview:recyclerview:1.2.1")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.1")
+    kapt AndroidLibraries.dataBinding
+    implementation Libraries.material
 
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.4.2")
-    implementation("androidx.navigation:navigation-ui-ktx:2.4.2")
-    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.4.2")
-    implementation("androidx.navigation:navigation-ui-ktx:2.4.2")
+    implementation AndroidLibraries.appcompat
+    implementation AndroidLibraries.lifecycleViewModel
+    implementation AndroidLibraries.lifecycleRunTime
+    implementation AndroidLibraries.lifecycleLiveData
+    implementation AndroidLibraries.recyclerview
+    implementation AndroidLibraries.constraintLayout
+    implementation AndroidLibraries.navigationFragmentKtx
+    implementation AndroidLibraries.navigationUiKtx
+    implementation AndroidLibraries.lifecycleExtensions
 
     //Glide
-    implementation("com.github.bumptech.glide:glide:4.11.0")
-    kapt("com.github.bumptech.glide:compiler:4.11.0")
-    implementation("com.caverock:androidsvg:1.2.1")
+    implementation Libraries.glide
+    kapt Libraries.glideCompiler
 
-    implementation("com.airbnb.android:lottie:$lottie_version")
-    implementation("com.facebook.shimmer:shimmer:0.5.0")
-    implementation("com.alexvasilkov:gesture-views:2.6.0")
-    implementation("me.grantland:autofittextview:0.2.1")
+    implementation Libraries.lottie
+    implementation Libraries.shimmer
+    implementation Libraries.autoFitText
 }
