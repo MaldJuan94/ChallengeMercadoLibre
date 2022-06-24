@@ -95,7 +95,7 @@ class RootViewModelTest {
     }
 
     @Test
-    fun `test the call Coupon function with all parameters`() {
+    fun `test the call onRequestSearch function with all parameters`() {
         runBlocking {
             val response = SearchProductsResponse(siteId = "MCO", results = arrayListOf(Results()))
             coEvery {
