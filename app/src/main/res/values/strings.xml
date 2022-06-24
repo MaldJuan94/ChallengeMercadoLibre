@@ -6,4 +6,6 @@
     <string name="search_empty">No tenemos resultados a tu búsqueda,repite tu búsqueda e intenta con un término más general</string>
     <string name="error_network">Parece que tienes problemas de conexión, asegúrate que estés conectado a internet.</string>
     <string name="error_general">En estos momentos la aplicación no está disponible, por favor ingresa más tarde.</string>
+    <string name="product_characteristics">Caracteristicas de producto</string>
+    <string name="product_description">Descripción</string>
 </resources>
