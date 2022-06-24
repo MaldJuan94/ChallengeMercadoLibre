@@ -84,15 +84,18 @@ object ComposeLibraries{
     const val materialCompose= "androidx.compose.material:material:${Versions.composeVersion}"
     const val animationCompose = "androidx.compose.animation:animation:${Versions.composeVersion}"
     const val uiToolingCompose  = "androidx.compose.ui:ui-tooling:${Versions.composeVersion}"
+    const val utilCompose = "androidx.compose.ui:ui-util:${Versions.composeVersion}"
     const val lifecycleVieModelCompose = "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.viewModelComposeVersion}"
     const val themeAdapterCompose = "androidx.compose.runtime:runtime-livedata:${Versions.composeVersion}"
     const val accompanistTheme = "com.google.android.material:compose-theme-adapter:${Versions.composeVersion}"
     const val accompanistInsets = "com.google.accompanist:accompanist-insets:${Versions.accompanistVersion}"
+    const val accompanistPager = "com.google.accompanist:accompanist-pager:${Versions.accompanistVersion}"
     const val accompanistNavigation ="com.google.accompanist:accompanist-navigation-material:${Versions.accompanistVersion}"
     const val constraintLayoutCompose ="androidx.constraintlayout:constraintlayout-compose:${Versions.composeConstraintLayout}"
     const val motionCompose ="io.github.fornewid:material-motion-compose-core:${Versions.motionComposeCore}"
     const val lottieCompose  = "com.airbnb.android:lottie-compose:${Versions.lottieVersion}"
     const val coilCompose = "io.coil-kt:coil-compose:${Versions.coilCompose}"
+
 }
 
 object AndroidLibraries {

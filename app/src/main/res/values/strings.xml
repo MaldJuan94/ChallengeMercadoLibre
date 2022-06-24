@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">ChallengeMercadoLibre</string>
+    <string name="main_header_message">Encuentra miles de productos con tan solo escribir un término.</string>
+    <string name="main_header_search_message">Buscar productos, marcas y más...</string>
+    <string name="main_categories_popular">Categorías populares</string>
+    <string name="search_empty">No tenemos resultados a tu búsqueda,repite tu búsqueda e intenta con un término más general</string>
+    <string name="error_network">Parece que tienes problemas de conexión, asegúrate que estés conectado a internet.</string>
+    <string name="error_general">En estos momentos la aplicación no está disponible, por favor ingresa más tarde.</string>
 </resources>

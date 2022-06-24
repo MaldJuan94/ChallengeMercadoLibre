@@ -17,11 +17,9 @@ object RepositoryModule {
     @Provides
     fun provideRecipeRepository(
         recipeService: ApiService,
-        //recipeMapper: RecipeDtoMapper,
     ): RecipeRepository {
         return RecipeRepositoryImpl(
             recipeService = recipeService,
-            //mapper = recipeMapper
         )
     }
 }

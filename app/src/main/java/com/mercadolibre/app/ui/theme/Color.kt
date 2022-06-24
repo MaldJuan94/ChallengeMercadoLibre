@@ -29,7 +29,11 @@ val Yellow100 = Color(0xFFFFF587)
 val Blue100 = Color(0XFF3483FA)
 val Red300 = Color(0xFFEA6D7E)
 val GeneralWhite = Color(0xFFFFFFFF)
+val GeneralBackGround = Color(0xFFF3F3F3)
 val GeneralBlack = Color(0xFF333333)
+val GrayOne = Color(0xFFDBDBDB)
+val GrayTwo = Color(0xFF929292)
+val GreenOne = Color(0xFF00a650)
 
 val AppDarkColors = darkColors(
     primary = Yellow200,

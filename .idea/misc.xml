@@ -6,13 +6,66 @@
         <entry key="../../../../../layout/compose-model-1655934186915.xml" value="0.16976351351351351" />
         <entry key="../../../../../layout/compose-model-1655936714340.xml" value="1.0" />
         <entry key="../../../../../layout/compose-model-1655939623238.xml" value="0.11" />
+        <entry key="../../../../../layout/compose-model-1655952801475.xml" value="0.1" />
+        <entry key="../../../../../layout/compose-model-1655953126828.xml" value="0.375" />
+        <entry key="../../../../../layout/compose-model-1655955588757.xml" value="0.5" />
+        <entry key="../../../../../layout/compose-model-1655955693347.xml" value="0.23333333333333334" />
+        <entry key="../../../../../layout/compose-model-1655956121950.xml" value="0.25" />
+        <entry key="../../../../../layout/compose-model-1655956233464.xml" value="0.23333333333333334" />
+        <entry key="../../../../../layout/compose-model-1655956402886.xml" value="0.23333333333333334" />
+        <entry key="../../../../../layout/compose-model-1655957416209.xml" value="0.25" />
+        <entry key="../../../../../layout/compose-model-1655958572594.xml" value="0.25" />
+        <entry key="../../../../../layout/compose-model-1655958841146.xml" value="0.1" />
+        <entry key="../../../../../layout/compose-model-1655959086868.xml" value="0.335" />
+        <entry key="../../../../../layout/compose-model-1655960935206.xml" value="0.24351851851851852" />
+        <entry key="../../../../../layout/compose-model-1655960967378.xml" value="0.375" />
+        <entry key="../../../../../layout/compose-model-1655964863452.xml" value="0.24351851851851852" />
+        <entry key="../../../../../layout/compose-model-1655988070493.xml" value="0.25" />
+        <entry key="../../../../../layout/compose-model-1655988694880.xml" value="0.15435222672064777" />
+        <entry key="../../../../../layout/compose-model-1655992304385.xml" value="0.17962962962962964" />
+        <entry key="../../../../../layout/compose-model-1655992714429.xml" value="1.0" />
+        <entry key="../../../../../layout/compose-model-1655992749757.xml" value="0.17962962962962964" />
+        <entry key="../../../../../layout/compose-model-1655992905861.xml" value="1.0" />
+        <entry key="../../../../../layout/compose-model-1655994606190.xml" value="0.17962962962962964" />
+        <entry key="../../../../../layout/compose-model-1655996252297.xml" value="0.17962962962962964" />
+        <entry key="../../../../../layout/compose-model-1655998308124.xml" value="0.1" />
+        <entry key="../../../../../layout/compose-model-1655998456115.xml" value="1.0" />
+        <entry key="../../../../../layout/compose-model-1655998920602.xml" value="0.125" />
+        <entry key="../../../../../layout/compose-model-1655999562200.xml" value="0.1" />
+        <entry key="../../../../../layout/compose-model-1656000632298.xml" value="0.335" />
+        <entry key="../../../../../layout/compose-model-1656001765474.xml" value="0.1814814814814815" />
+        <entry key="../../../../../layout/compose-model-1656001917899.xml" value="1.0" />
+        <entry key="../../../../../layout/compose-model-1656011373567.xml" value="0.375" />
+        <entry key="../../../../../layout/compose-model-1656012150953.xml" value="0.1814814814814815" />
+        <entry key="../../../../../layout/compose-model-1656014996585.xml" value="0.1814814814814815" />
+        <entry key="../../../../../layout/compose-model-1656015684252.xml" value="0.25" />
+        <entry key="../../../../../layout/compose-model-1656016292628.xml" value="0.125" />
+        <entry key="../../../../../layout/compose-model-1656016548100.xml" value="0.55" />
+        <entry key="../../../../../layout/compose-model-1656017222539.xml" value="0.25" />
+        <entry key="../../../../../layout/compose-model-1656022893207.xml" value="1.0" />
+        <entry key="../../../../../layout/compose-model-1656028172462.xml" value="0.1814814814814815" />
+        <entry key="../../../../../layout/compose-model-1656037671384.xml" value="0.375" />
+        <entry key="../../../../../layout/compose-model-1656037831048.xml" value="0.1814814814814815" />
+        <entry key="../../../../../layout/compose-model-1656043635267.xml" value="0.1814814814814815" />
+        <entry key="../../../../../layout/compose-model-1656047394833.xml" value="0.1814814814814815" />
+        <entry key="../../../../../layout/compose-model-1656047949152.xml" value="0.1814814814814815" />
+        <entry key="../../../../../layout/compose-model-1656053579539.xml" value="0.1814814814814815" />
+        <entry key="../../../../../layout/compose-model-1656061532177.xml" value="0.1638655462184874" />
+        <entry key="../../../../../layout/compose-model-1656061545875.xml" value="0.1814814814814815" />
+        <entry key="../../../../../layout/compose-model-1656061607463.xml" value="0.1814814814814815" />
+        <entry key="app/src/main/res/drawable-v24/ic_clock.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable-v24/ic_ico_arrow_up_left.xml" value="0.1" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.126" />
+        <entry key="app/src/main/res/drawable/ic_ico_arrow_up_left.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_image_no_found.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.126" />
         <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.126" />
         <entry key="app/src/main/res/drawable/ic_mercadolibre.xml" value="0.126" />
+        <entry key="app/src/main/res/drawable/ic_mercadolibre_small.xml" value="0.126" />
         <entry key="app/src/main/res/font/fonts.xml" value="0.23333333333333334" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.12259371833839919" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.126" />
+        <entry key="app/src/main/res/xml/network_security_config.xml" value="0.21666666666666667" />
       </map>
     </option>
   </component>

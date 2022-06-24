@@ -9,7 +9,7 @@ import com.mercadolibre.app.ui.theme.GeneralWhite
 @Composable
 fun BaseApp(content: @Composable () -> Unit) {
     AppTheme {
-        Surface(color = GeneralWhite) {
+        Surface(color = GeneralWhite, contentColor = GeneralWhite) {
             content()
         }
     }

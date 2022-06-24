@@ -1,222 +1,160 @@
 package com.mercadolibre.app.ui.screens.main
 
+import android.content.res.Configuration
 import android.util.Log
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.text.selection.LocalTextSelectionColors
-import androidx.compose.foundation.text.selection.TextSelectionColors
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.mercadolibre.app.ui.events.SearchWidgetState
-import com.mercadolibre.app.ui.theme.AppTheme
-import com.mercadolibre.app.ui.theme.AppTypography
-import com.mercadolibre.app.ui.theme.Blue100
-import com.mercadolibre.app.ui.theme.GeneralBlack
-import com.mercadolibre.app.ui.viewmodel.RootViewModel
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
+import com.mercadolibre.app.R
+import com.mercadolibre.app.ui.events.MainScreenEvents
+import com.mercadolibre.app.ui.events.MainState
+import com.mercadolibre.app.ui.screens.error.ErrorScreen
+import com.mercadolibre.app.ui.theme.*
+import com.mercadolibre.app.ui.utils.AnimateContent
+import com.mercadolibre.app.viewmodel.RootViewModel
+import soup.compose.material.motion.MaterialMotion
+import soup.compose.material.motion.materialSharedAxisZ
 
 @ExperimentalFoundationApi
 @Composable
 fun MainScreen(
     viewModel: RootViewModel,
-    onNavigate: (
-        String
-    ) -> Unit
+    onEvent: (action: MainScreenEvents) -> Unit
 ) {
-    val searchWidgetState by viewModel.searchWidgetState
-    val searchTextState by viewModel.searchTextState
+    val mainState by viewModel.categoriesState
+    LaunchedEffect(key1 = true) {
+        viewModel.getCategories()
+    }
+    BobyMain(
+        mainState,
+        onEvent
+    )
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun BobyMain(
+    state: MainState,
+    onEvent: (action: MainScreenEvents) -> Unit
+) {
+    var numberByRow by remember { mutableStateOf(3) }
+    val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
+
+    val configuration = LocalConfiguration.current
+    numberByRow = when (configuration.orientation) {
+        Configuration.ORIENTATION_LANDSCAPE -> {
+            4
+        }
+        else -> {
+            3
+        }
+    }
 
     Scaffold(
+        scaffoldState = scaffoldState,
         topBar = {
-            MainAppBar(
-                searchWidgetState = searchWidgetState,
-                searchTextState = searchTextState,
-                onTextChange = {
-                    viewModel.updateSearchTextState(newValue = it)
-                },
-                onCloseClicked = {
-                    viewModel.updateSearchWidgetState(newValue = SearchWidgetState.CLOSED)
-                },
-                onSearchClicked = {
-                    Log.d("Searched Text", it)
-                },
-                onSearchTriggered = {
-                    viewModel.updateSearchWidgetState(newValue = SearchWidgetState.OPENED)
-                }
-            )
-        }
-    ) {
-
-
-    }
-}
-
-@Composable
-fun MainAppBar(
-    searchWidgetState: SearchWidgetState,
-    searchTextState: String,
-    onTextChange: (String) -> Unit,
-    onCloseClicked: () -> Unit,
-    onSearchClicked: (String) -> Unit,
-    onSearchTriggered: () -> Unit
-) {
-    when (searchWidgetState) {
-        SearchWidgetState.CLOSED -> {
-            DefaultAppBar(
-                onSearchClicked = onSearchTriggered
-            )
-        }
-        SearchWidgetState.OPENED -> {
-            SearchAppBar(
-                text = searchTextState,
-                onTextChange = onTextChange,
-                onCloseClicked = onCloseClicked,
-                onSearchClicked = onSearchClicked
-            )
-        }
-    }
-}
-
-@Composable
-fun DefaultAppBar(onSearchClicked: () -> Unit) {
-    TopAppBar(
-        title = {
-            Text(
-                text = "Buscador",
-                color = GeneralBlack
+            HeaderMain(
+                modifier = Modifier.fillMaxWidth(),
+                onEvent = onEvent,
+                resultQuery = stringResource(R.string.main_categories_popular)
             )
         },
-        actions = {
-            IconButton(
-                onClick = { onSearchClicked() }
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Search,
-                    contentDescription = "Search Icon",
-                    tint = GeneralBlack
-                )
+        drawerElevation = 8.dp
+    ) {
+        ConstraintLayout(
+            modifier = Modifier
+                .background(color = GeneralBackGround)
+                .fillMaxSize()
+        ) {
+            val (content) = createRefs()
+            MaterialMotion(
+                modifier = Modifier.constrainAs(content) {
+                    top.linkTo(parent.top, margin = 0.dp)
+                    start.linkTo(parent.start, margin = 0.dp)
+                    end.linkTo(parent.end, margin = 0.dp)
+                    width = Dimension.fillToConstraints
+                },
+                targetState = state,
+                motionSpec = {
+                    materialSharedAxisZ(durationMillis = 500)
+                },
+                pop = state is MainState.SuccessGetCategories
+            ) { newScreen ->
+
+                when (newScreen) {
+                    is MainState.Loading -> {
+                        Log.e("Scren", "Loading")
+                        val (shimmerContent) = createRefs()
+                        Column(modifier = Modifier
+                            .constrainAs(shimmerContent) {
+                                top.linkTo(parent.top, margin = 16.dp)
+                                start.linkTo(parent.start, margin = 16.dp)
+                                end.linkTo(parent.end, margin = 16.dp)
+                                width = Dimension.fillToConstraints
+                            }
+                        ) {
+                            AnimatedShimmerCategories(numberByRow)
+                        }
+                    }
+                    is MainState.SuccessGetCategories -> {
+                        Log.e("Scren", "SuccessGetCategories")
+                        val (shimmerContent) = createRefs()
+                        Column(modifier = Modifier
+                            .constrainAs(shimmerContent) {
+                                top.linkTo(parent.top, margin = 2.dp)
+                                start.linkTo(parent.start, margin = 2.dp)
+                                end.linkTo(parent.end, margin = 2.dp)
+                                width = Dimension.fillToConstraints
+                                height = Dimension.fillToConstraints
+                            }
+                        ) {
+                            Categories(newScreen.categories, numberByRow, onEvent)
+                        }
+                    }
+                    is MainState.ErrorNetwork -> {
+                        val (empty) = createRefs()
+                        AnimateContent(visible = true, modifier = Modifier
+                            .constrainAs(empty) {
+                                top.linkTo(parent.top, margin = 2.dp)
+                                start.linkTo(parent.start, margin = 2.dp)
+                                end.linkTo(parent.end, margin = 2.dp)
+                                width = Dimension.fillToConstraints
+                                height = Dimension.fillToConstraints
+                            }) {
+                            ErrorScreen(
+                                message = stringResource(id = R.string.error_network),
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                    }
+                    is MainState.Error -> {
+                        val (empty) = createRefs()
+                        AnimateContent(visible = true, modifier = Modifier
+                            .constrainAs(empty) {
+                                top.linkTo(parent.top, margin = 2.dp)
+                                start.linkTo(parent.start, margin = 2.dp)
+                                end.linkTo(parent.end, margin = 2.dp)
+                                width = Dimension.fillToConstraints
+                            }) {
+                            ErrorScreen(
+                                message = stringResource(id = R.string.error_general),
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                    }
+                }
             }
         }
-    )
-}
-
-@Composable
-fun SearchAppBar(
-    text: String,
-    onTextChange: (String) -> Unit,
-    onCloseClicked: () -> Unit,
-    onSearchClicked: (String) -> Unit,
-) {
-
-    val mCustomTextSelectionColors = TextSelectionColors(
-        handleColor = Blue100,
-        backgroundColor = Blue100.copy(
-            alpha = 0.5f
-        )
-    )
-
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp),
-        elevation = AppBarDefaults.TopAppBarElevation,
-        color = MaterialTheme.colors.primary
-    ) {
-        CompositionLocalProvider(LocalTextSelectionColors provides mCustomTextSelectionColors) {
-            TextField(modifier = Modifier
-                .fillMaxWidth(),
-                value = text,
-                onValueChange = {
-                    onTextChange(it)
-                },
-                placeholder = {
-                    Text(
-                        modifier = Modifier
-                            .alpha(ContentAlpha.medium),
-                        text = "Buscar aqui...",
-                        color = GeneralBlack
-                    )
-                },
-                textStyle = AppTypography.subtitle1,
-                singleLine = true,
-                leadingIcon = {
-                    IconButton(
-                        modifier = Modifier
-                            .alpha(ContentAlpha.medium),
-                        onClick = {}
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Search,
-                            contentDescription = "Search Icon",
-                            tint = GeneralBlack
-                        )
-                    }
-                },
-                trailingIcon = {
-                    IconButton(
-                        onClick = {
-                            if (text.isNotEmpty()) {
-                                onTextChange("")
-                            } else {
-                                onCloseClicked()
-                            }
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = "Close Icon",
-                            tint = GeneralBlack
-                        )
-                    }
-                },
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Search
-                ),
-                keyboardActions = KeyboardActions(
-                    onSearch = {
-                        onSearchClicked(text)
-                    }
-                ),
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = GeneralBlack,
-                    backgroundColor = Color.Transparent,
-                    cursorColor = GeneralBlack.copy(alpha = ContentAlpha.medium)
-                ))
-        }
     }
 }
 
 
-@Composable
-@Preview
-fun DefaultAppBarPreview() {
-    AppTheme {
-        DefaultAppBar(onSearchClicked = {})
-    }
-}
-
-@Composable
-@Preview
-fun SearchAppBarPreview() {
-    AppTheme {
-        SearchAppBar(
-            text = "Some random text",
-            onTextChange = {},
-            onCloseClicked = {},
-            onSearchClicked = {}
-        )
-    }
-}
