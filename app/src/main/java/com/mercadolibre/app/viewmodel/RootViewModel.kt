@@ -70,7 +70,7 @@ class RootViewModel @Inject constructor(
         onSuccess = ::onSuccessSearch
     )
 
-    private fun onLoadUpdatedSearch(loading: Boolean, type: String) {
+    fun onLoadUpdatedSearch(loading: Boolean, type: String) {
         val typeEnum = when (type) {
             SearchType.BY_CATEGORY.type -> SearchType.BY_CATEGORY
             SearchType.BY_TERMS.type -> SearchType.BY_TERMS
@@ -79,7 +79,7 @@ class RootViewModel @Inject constructor(
         _stateResult.value = _stateResult.value.copy(loading = loading, type = typeEnum)
     }
 
-    private suspend fun onRequestSearch(
+    suspend fun onRequestSearch(
         key: Int,
         query: String,
         type: String
