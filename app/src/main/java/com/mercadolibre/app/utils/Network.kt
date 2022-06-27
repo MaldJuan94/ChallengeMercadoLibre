@@ -7,18 +7,6 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 
 object Network {
-
-    @Suppress("DEPRECATION")
-    fun checkNetworkStateWithActiveNetworkInfo(context: Context): Boolean {
-        return if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
-            val connectivityManager =
-                context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val networkInfo = connectivityManager.activeNetworkInfo
-            networkInfo != null && networkInfo.isConnected
-        } else
-            checkNetworkStateWithNetworkCapabilities(context)
-    }
-
     @RequiresApi(Build.VERSION_CODES.M)
     fun checkNetworkStateWithNetworkCapabilities(context: Context): Boolean {
         val connectivityManager =

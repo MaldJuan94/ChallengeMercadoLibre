@@ -1,12 +1,12 @@
-package com.mercadolibre.app
+package com.mercadolibre.app.viewmodel
 
 import android.app.Application
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.mercadolibre.app.RetryRule
 import com.mercadolibre.app.models.search.Results
 import com.mercadolibre.app.models.search.SearchProductsResponse
 import com.mercadolibre.app.usescases.*
 import com.mercadolibre.app.utils.SearchType
-import com.mercadolibre.app.viewmodel.RootViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.every
@@ -15,7 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.setMain
 import org.junit.Assert
 import org.junit.Before
@@ -29,8 +29,11 @@ representativas para los tipos de métodos implementados
  */
 class RootViewModelTest {
 
+    @get:Rule
+    val retryRule = RetryRule()
+
     @ExperimentalCoroutinesApi
-    private val testDispatcher = TestCoroutineDispatcher()
+    private val testDispatcher = UnconfinedTestDispatcher()
 
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
@@ -77,14 +80,14 @@ class RootViewModelTest {
     @Test
     fun `test the call onLoadUpdatedSearch function with all parameters`() {
         //Execute test
-        viewModel!!.onLoadUpdatedSearch(loading = false, type = "other")
-        viewModel!!.onLoadUpdatedSearch(loading = false, type = "byTerms")
-        viewModel!!.onLoadUpdatedSearch(loading = false, type = "byCategory")
+        viewModel?.onLoadUpdatedSearch(loading = false, type = "other")
+        viewModel?.onLoadUpdatedSearch(loading = false, type = "byTerms")
+        viewModel?.onLoadUpdatedSearch(loading = false, type = "byCategory")
 
         //Execute assert
         Assert.assertFalse(
             "stateResult loading field must be false",
-            viewModel?.stateResult?.value?.loading!!
+            viewModel?.stateResult?.value?.loading?: true
         )
 
         Assert.assertEquals(
@@ -108,8 +111,7 @@ class RootViewModelTest {
             } returns response
 
             //Execute test
-            val result = viewModel!!.onRequestSearch(
-                key = 1,
+            val result = viewModel?.callSearchProductPager(
                 query = "Test",
                 type = SearchType.BY_CATEGORY.type
             )
@@ -119,7 +121,7 @@ class RootViewModelTest {
             Assert.assertEquals(
                 "result size field must be 1",
                 1,
-                result.getOrNull()?.size
+                viewModel?.stateResult?.value?.data?.size
             )
         }
     }

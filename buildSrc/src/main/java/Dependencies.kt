@@ -19,8 +19,8 @@ object Releases {
 
 object Versions {
     const val kotlin = "1.6.10"
-    const val hilt = "2.37"
-    const val gradle = "7.0.4"
+    const val hilt = "2.38.1"
+    const val gradle = "7.2.1"
     const val coreKtx = "1.8.0"
     const val appcompat = "1.4.2"
     const val lifecycle = "2.4.1"
@@ -115,7 +115,10 @@ object TestLibraries {
     const val mockk = "io.mockk:mockk:${Versions.mockk}"
     const val junitExt = "androidx.test.ext:junit:${Versions.junitExt}"
     const val espresso = "androidx.test.espresso:espresso-core:${Versions.espresso}"
+    const val espressoIntents = "androidx.test.espresso:espresso-intents:${Versions.espresso}"
+    const val espressoWeb = "androidx.test.espresso:espresso-web:${Versions.espresso}"
     const val testRunner = "androidx.test:runner:${Versions.testRunner}"
     const val mockkAndroid = "io.mockk:mockk-android:${Versions.mockk}"
     const val testRules = "androidx.test:rules:${Versions.testRules}"
+
 }

@@ -1,10 +1,13 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id("com.android.application")
-    id("kotlin-parcelize")
     id("kotlin-android")
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
     id("org.jetbrains.kotlin.android")
+    id("jacoco")
+    id("jacoco-report")
 }
 
 android {
@@ -15,24 +18,32 @@ android {
         minSdk = 23
         targetSdk = 32
         versionCode = 1
+        applicationId = ApplicationIdentifier.id
         versionName = Releases.versionName
         versionCode = Releases.versionCodeMaster
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments["size"] = "Large"
+        testInstrumentationRunnerArguments["clearPackageData"] = "true"
         buildConfigField("String", "SERVER_URL", "\"https://api.mercadolibre.com/\"")
     }
 
     buildTypes {
         getByName("debug") {
             isDebuggable = true
+            isMinifyEnabled = false
+            isShrinkResources = false
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
+            isTestCoverageEnabled = true
         }
         getByName("release") {
+            isDebuggable = false
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
             applicationIdSuffix = ".release"
             versionNameSuffix = "-release"
+            isTestCoverageEnabled = true
         }
     }
 
@@ -40,14 +51,17 @@ android {
 
     productFlavors {
         create("develop") {
+            applicationId = ApplicationIdentifier.idDev
             dimension = "environment"
             versionName = Releases.versionName
             versionCode = Releases.versionCodeDev
             buildConfigField("String", "SERVER_URL", "\"https://api.mercadolibre.com/\"")
             manifestPlaceholders["manifestApplicationId"] = "$applicationId"
             signingConfig = signingConfigs.getByName("debug")
+            testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }
         create("qa") {
+            applicationId = ApplicationIdentifier.idQA
             dimension = "environment"
             versionName = Releases.versionName
             versionCode = Releases.versionCodeQa
@@ -56,6 +70,7 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
         create("master") {
+            applicationId = ApplicationIdentifier.id
             dimension = "environment"
             versionName = Releases.versionName
             versionCode = Releases.versionCodeMaster
@@ -72,23 +87,26 @@ android {
     testOptions {
         animationsDisabled = true
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
-        unitTests.isIncludeAndroidResources = true
+        unitTests.apply {
+            isReturnDefaultValues = true
+            isIncludeAndroidResources = true
+        }
     }
 
     lint {
-        isCheckReleaseBuilds = false
-        isAbortOnError = false
-        isIgnoreWarnings = true
-        isQuiet = true
+        abortOnError = false
+        checkReleaseBuilds = false
+        ignoreWarnings = true
+        quiet = true
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
     packagingOptions {
@@ -114,8 +132,12 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.composeVersion
+        kotlinCompilerExtensionVersion = "1.1.1"
     }
+}
+
+jacoco {
+    toolVersion = "0.8.7"
 }
 
 configurations.all {
@@ -169,6 +191,8 @@ dependencies {
     androidTestImplementation(TestLibraries.mockkAndroid)
     androidTestImplementation(TestLibraries.junitExt)
     androidTestImplementation(TestLibraries.espresso)
+    androidTestImplementation(TestLibraries.espressoIntents)
+    androidTestImplementation(TestLibraries.espressoWeb)
     androidTestImplementation(TestLibraries.testRunner)
     androidTestImplementation(TestLibraries.testRules)
 

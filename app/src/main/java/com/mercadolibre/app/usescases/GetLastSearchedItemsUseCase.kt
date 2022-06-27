@@ -11,6 +11,6 @@ class GetLastSearchedItemsUseCase @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
     fun invoke(): ArrayList<String> {
-        return sharedPreferenceUtils.getLastSearchedListNewMyDiscount(context)
+        return sharedPreferenceUtils.getLastSearchedList(context)
     }
 }

@@ -1,4 +1,4 @@
-package com.mercadolibre.app.network
+package com.mercadolibre.app.utils
 
 const val SOCKET_TIME_OUT_EXCEPTION =
     "Se agotó el tiempo de espera de la solicitud al intentar conectarse. Asegúrate de tener una señal fuerte e inténtalo de nuevo."
