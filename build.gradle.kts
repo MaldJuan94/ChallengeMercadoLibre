@@ -8,9 +8,8 @@ buildscript {
         classpath("com.android.tools.build:gradle:${Versions.gradle}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}")
         classpath("com.google.dagger:hilt-android-gradle-plugin:${Versions.hilt}")
-
-        classpath ("org.jacoco:org.jacoco.core:0.8.7")
-        classpath ("com.vanniktech:gradle-android-junit-jacoco-plugin:0.16.0")
+        classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${Versions.sonar}")
+        classpath("org.jacoco:org.jacoco.core:${Versions.jacoco}")
     }
 }
 

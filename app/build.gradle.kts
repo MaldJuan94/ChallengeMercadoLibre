@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -7,16 +5,15 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("org.jetbrains.kotlin.android")
     id("jacoco")
-    id("jacoco-report")
+    id("org.sonarqube")
 }
 
 android {
-
-    compileSdk = 32
-    buildToolsVersion = "32.0.0"
+    compileSdk = 31
+    buildToolsVersion = "30.0.2"
     defaultConfig {
         minSdk = 23
-        targetSdk = 32
+        targetSdk = 30
         versionCode = 1
         applicationId = ApplicationIdentifier.id
         versionName = Releases.versionName
@@ -43,7 +40,7 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
             applicationIdSuffix = ".release"
             versionNameSuffix = "-release"
-            isTestCoverageEnabled = true
+            isTestCoverageEnabled = false
         }
     }
 
@@ -58,7 +55,6 @@ android {
             buildConfigField("String", "SERVER_URL", "\"https://api.mercadolibre.com/\"")
             manifestPlaceholders["manifestApplicationId"] = "$applicationId"
             signingConfig = signingConfigs.getByName("debug")
-            testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }
         create("qa") {
             applicationId = ApplicationIdentifier.idQA
@@ -86,7 +82,6 @@ android {
 
     testOptions {
         animationsDisabled = true
-        execution = "ANDROIDX_TEST_ORCHESTRATOR"
         unitTests.apply {
             isReturnDefaultValues = true
             isIncludeAndroidResources = true
@@ -94,19 +89,19 @@ android {
     }
 
     lint {
-        abortOnError = false
-        checkReleaseBuilds = false
-        ignoreWarnings = true
-        quiet = true
+        isAbortOnError = false
+        isCheckReleaseBuilds = false
+        isIgnoreWarnings = true
+        isQuiet = true
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
     packagingOptions {
@@ -136,10 +131,6 @@ android {
     }
 }
 
-jacoco {
-    toolVersion = "0.8.7"
-}
-
 configurations.all {
     resolutionStrategy {
         force(AndroidLibraries.appcompat)
@@ -147,7 +138,7 @@ configurations.all {
 }
 
 dependencies {
-    //Ktx and lifecycle
+//Ktx and lifecycle
     implementation(AndroidLibraries.coreKtx)
     implementation(KotlinLibraries.kotlin)
     implementation(AndroidLibraries.appcompat)
@@ -155,7 +146,7 @@ dependencies {
     implementation(AndroidLibraries.lifecycleRunTime)
     implementation(AndroidLibraries.lifecycleLiveData)
 
-    //Compose
+//Compose
     implementation(ComposeLibraries.activityCompose)
     implementation(ComposeLibraries.navigationCompose)
     implementation(ComposeLibraries.materialCompose)
@@ -173,17 +164,17 @@ dependencies {
     implementation(ComposeLibraries.coilCompose)
     implementation(Window.window)
 
-    //Retrofit
+//Retrofit
     implementation(Libraries.retrofit)
     implementation(Libraries.retrofitGsonConverter)
     api(Libraries.httpLoggingInterceptor)
     implementation(Libraries.okhttp)
 
-    //Coroutines
+//Coroutines
     implementation(KotlinLibraries.coreKotlinCoroutine)
     implementation(KotlinLibraries.androidKotlinCoroutine)
 
-    //Testing
+//Testing
     testImplementation(TestLibraries.junit)
     testImplementation(TestLibraries.coreTesting)
     testImplementation(TestLibraries.coroutinesTesting)
@@ -196,9 +187,125 @@ dependencies {
     androidTestImplementation(TestLibraries.testRunner)
     androidTestImplementation(TestLibraries.testRules)
 
-    //Dependence Injection DI
+//Dependence Injection DI
     implementation(Libraries.daggerHilt)
     kapt(Libraries.daggerHiltCompiler)
     implementation(AndroidLibraries.activityKtx)
+}
 
+
+//Sonar and jaCoCo report
+fun org.sonarqube.gradle.SonarQubeProperties.add(name: String, valueProvider: () -> String) {
+    properties.getOrPut(name) { mutableSetOf<Any>() }
+        .also {
+            @Suppress("UNCHECKED_CAST")
+            (it as MutableCollection<Any>).add(object {
+                override fun toString() = valueProvider()
+            })
+        }
+}
+
+configurations.all {
+    resolutionStrategy {
+        eachDependency {
+            if ("org.jacoco" == requested.group) {
+                useVersion(Versions.jacoco)
+            }
+        }
+    }
+}
+
+tasks.withType<Test> {
+    configure<JacocoTaskExtension> {
+        isIncludeNoLocationClasses = true
+        excludes = listOf("jdk.internal.*")
+    }
+}
+
+sonarqube {
+    properties {
+        val projectName = "Mercado Libre"
+        property("sonar.host.url", "http://localhost:9000")
+        property("sonar.sourceEncoding", "UTF-8")
+        property("sonar.sources", "src/main/java")
+        property("sonar.projectKey", projectName.replace(" ", "-"))
+        property("sonar.projectName", projectName)
+        property("sonar.projectVersion", project.version.toString())
+        property("sonar.projectDescription", "A demo MercadoLibre simple app")
+        property("sonar.organization", "MercadoLibre")
+        property("sonar.tests", mutableSetOf("src/test/java", "src/androidTest/java"))
+        property("sonar.test.inclusions", "**/*Test*/**")
+        property("sonar.java.coveragePlugin", "jacoco")
+        property(
+            "sonar.android.lint.report",
+            "${project.buildDir}/reports/lint-results-stagingDebug.xml"
+        )
+
+        //Credentials for login sonar
+        property("sonar.login", "admin")
+        property("sonar.password", "123456")
+
+        property(
+            "sonar.exclusions", "**/*Test*/**," + "*.json," +
+                    "**/*test*/**," +
+                    "**/.gradle/**," +
+                    "**/R.class"
+        )
+
+        property("sonar.coverage.exclusions", ExcludeCoverage.exclude)
+        property(
+            "sonar.coverage.jacoco.xmlReportPaths",
+            "build/reports/jacoco/testDevelopDebugUnitTestCoverage/testDevelopDebugUnitTestCoverage.xml"
+        )
+        property("sonar.junit.reportPaths", "build/test-results/testDevelopDebugUnitTest")
+        property("sonar.links.scm", "https://github.com/MaldJuan94/ChallengeMercadoLibre")
+    }
+}
+
+android {
+    applicationVariants.all {
+        val variantName = "${this.flavorName.capitalize()}${this.buildType.name.capitalize()}"
+        val testTaskName = "test${variantName}UnitTest"
+        val uiTestCoverageTaskName = "create${variantName}CoverageReport"
+        task<JacocoReport>("${testTaskName}Coverage") {
+            dependsOn(testTaskName, uiTestCoverageTaskName)
+            group = "Reporting"
+            description =
+                "Generate Jacoco coverage reports for the $variantName build"
+            reports {
+                xml.isEnabled = true
+                html.isEnabled = true
+            }
+            val javaClasses = fileTree(this@all.javaCompileProvider.get().destinationDir) {
+                exclude(ExcludeCoverage.exclude)
+            }
+            val kotlinClasses = fileTree("${buildDir}/tmp/kotlin-classes/${variantName}") {
+                exclude(ExcludeCoverage.exclude)
+            }
+            classDirectories.setFrom(javaClasses, kotlinClasses)
+
+            sourceDirectories.setFrom(
+                fileTree("$buildDir/src/main/java"),
+                fileTree("$buildDir/src/${variantName}/java"),
+                fileTree("$buildDir/src/main/kotlin"),
+                fileTree("$buildDir/src/${variantName}/kotlin")
+            )
+
+            val uiTestsData =
+                fileTree("${buildDir}/outputs/code_coverage/${variantName}AndroidTest/connected/") {
+                    include("**/*.ec")
+                }
+
+            val unitTestsData =
+                fileTree("${buildDir}/outputs/unit_test_code_coverage/${variantName}UnitTest/") {
+                    include("**/*.exec")
+                }
+
+            executionData.setFrom(
+                fileTree("$buildDir/jacoco/${testTaskName}.exec"),
+                unitTestsData,
+                uiTestsData
+            )
+        }
+    }
 }
