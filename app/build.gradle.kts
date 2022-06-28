@@ -27,8 +27,6 @@ android {
     buildTypes {
         getByName("debug") {
             isDebuggable = true
-            isMinifyEnabled = false
-            isShrinkResources = false
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
             isTestCoverageEnabled = true
@@ -264,48 +262,50 @@ sonarqube {
 
 android {
     applicationVariants.all {
-        val variantName = "${this.flavorName.capitalize()}${this.buildType.name.capitalize()}"
-        val testTaskName = "test${variantName}UnitTest"
-        val uiTestCoverageTaskName = "create${variantName}CoverageReport"
-        task<JacocoReport>("${testTaskName}Coverage") {
-            dependsOn(testTaskName, uiTestCoverageTaskName)
-            group = "Reporting"
-            description =
-                "Generate Jacoco coverage reports for the $variantName build"
-            reports {
-                xml.isEnabled = true
-                html.isEnabled = true
-            }
-            val javaClasses = fileTree(this@all.javaCompileProvider.get().destinationDir) {
-                exclude(ExcludeCoverage.exclude)
-            }
-            val kotlinClasses = fileTree("${buildDir}/tmp/kotlin-classes/${variantName}") {
-                exclude(ExcludeCoverage.exclude)
-            }
-            classDirectories.setFrom(javaClasses, kotlinClasses)
-
-            sourceDirectories.setFrom(
-                fileTree("$buildDir/src/main/java"),
-                fileTree("$buildDir/src/${variantName}/java"),
-                fileTree("$buildDir/src/main/kotlin"),
-                fileTree("$buildDir/src/${variantName}/kotlin")
-            )
-
-            val uiTestsData =
-                fileTree("${buildDir}/outputs/code_coverage/${variantName}AndroidTest/connected/") {
-                    include("**/*.ec")
+        if (this.buildType.name == "debug"){
+            val variantName = "${this.flavorName.capitalize()}${this.buildType.name.capitalize()}"
+            val testTaskName = "test${variantName}UnitTest"
+            val uiTestCoverageTaskName = "create${variantName}CoverageReport"
+            task<JacocoReport>("${testTaskName}Coverage") {
+                dependsOn(testTaskName, uiTestCoverageTaskName)
+                group = "Reporting"
+                description =
+                    "Generate Jacoco coverage reports for the $variantName build"
+                reports {
+                    xml.isEnabled = true
+                    html.isEnabled = true
                 }
-
-            val unitTestsData =
-                fileTree("${buildDir}/outputs/unit_test_code_coverage/${variantName}UnitTest/") {
-                    include("**/*.exec")
+                val javaClasses = fileTree(this@all.javaCompileProvider.get().destinationDir) {
+                    exclude(ExcludeCoverage.exclude)
                 }
+                val kotlinClasses = fileTree("${buildDir}/tmp/kotlin-classes/${variantName}") {
+                    exclude(ExcludeCoverage.exclude)
+                }
+                classDirectories.setFrom(javaClasses, kotlinClasses)
 
-            executionData.setFrom(
-                fileTree("$buildDir/jacoco/${testTaskName}.exec"),
-                unitTestsData,
-                uiTestsData
-            )
+                sourceDirectories.setFrom(
+                    fileTree("$buildDir/src/main/java"),
+                    fileTree("$buildDir/src/${variantName}/java"),
+                    fileTree("$buildDir/src/main/kotlin"),
+                    fileTree("$buildDir/src/${variantName}/kotlin")
+                )
+
+                val uiTestsData =
+                    fileTree("${buildDir}/outputs/code_coverage/${variantName}AndroidTest/connected/") {
+                        include("**/*.ec")
+                    }
+
+                val unitTestsData =
+                    fileTree("${buildDir}/outputs/unit_test_code_coverage/${variantName}UnitTest/") {
+                        include("**/*.exec")
+                    }
+
+                executionData.setFrom(
+                    fileTree("$buildDir/jacoco/${testTaskName}.exec"),
+                    unitTestsData,
+                    uiTestsData
+                )
+            }
         }
     }
 }

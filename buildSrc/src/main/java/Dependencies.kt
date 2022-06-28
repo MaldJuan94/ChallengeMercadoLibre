@@ -35,7 +35,7 @@ object Versions {
     const val espresso = "3.4.0"
     const val testRunner = "1.4.0"
     const val testRules = "1.4.0"
-    const val jacoco = "0.8.8"
+    const val jacoco = "0.8.7"
     const val sonar = "2.8"
 
     //Retrofit
@@ -140,9 +140,9 @@ object ExcludeCoverage {
     val exclude = mutableSetOf(
         "**/com/mercadolibre/app/di/**/*.*,",
         "**/com/mercadolibre/app/network/**/*.*,",
-        "**/com/mercadolibre/app/repository/**/*.*,",
         "**/com/mercadolibre/app/ui/**/*.*,",
         "**/com/mercadolibre/app/utils/**/*.*,",
+        "**/com/mercadolibre/app/models/**/*.*,",
         "**/R\$*.class",
         "**/*\$inlined$*.*",
 
