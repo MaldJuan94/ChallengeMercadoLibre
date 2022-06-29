@@ -23,3 +23,7 @@ A demo MercadoLibre simple app using compose and Hilt based on modern Android te
   - Repository package
   - Use case package
   - ViewModel package
+
+**ChallengeMercadoLibre wiki**
+
+1.[Install sonarQube and run test unit](https://github.com/MaldJuan94/ChallengeMercadoLibre/wiki/Instalaci%C3%B3n-de-SonarQube-con-Docker)
