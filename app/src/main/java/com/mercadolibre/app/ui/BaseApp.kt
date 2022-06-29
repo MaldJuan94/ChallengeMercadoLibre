@@ -1,6 +1,5 @@
 package com.mercadolibre.app.ui
 
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import com.mercadolibre.app.ui.theme.AppTheme

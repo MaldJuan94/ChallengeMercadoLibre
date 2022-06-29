@@ -1,5 +1,9 @@
 package com.mercadolibre.app.network
 
+import com.mercadolibre.app.utils.CONNECT_EXCEPTION
+import com.mercadolibre.app.utils.SOCKET_TIME_OUT_EXCEPTION
+import com.mercadolibre.app.utils.UNKNOWN_HOST_EXCEPTION
+import com.mercadolibre.app.utils.UNKNOWN_NETWORK_EXCEPTION
 import retrofit2.HttpException
 import retrofit2.Response
 import java.net.ConnectException

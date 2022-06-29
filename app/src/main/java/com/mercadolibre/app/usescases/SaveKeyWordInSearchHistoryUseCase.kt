@@ -1,7 +1,7 @@
 package com.mercadolibre.app.usescases
 
 import android.content.Context
-import com.mercadolibre.app.network.MAXIMUM_SIZE_LAST_SEARCHED
+import com.mercadolibre.app.utils.MAXIMUM_SIZE_LAST_SEARCHED
 import com.mercadolibre.app.utils.SharedPreferenceUtils
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.*
@@ -13,7 +13,7 @@ class SaveKeyWordInSearchHistoryUseCase @Inject constructor(
 ) {
     fun invoke(keyword: String?) {
         val keywordSelected = keyword.orEmpty().lowercase(Locale.ROOT)
-        val lastItemsList = sharedPreferenceUtils.getLastSearchedListNewMyDiscount(context)
+        val lastItemsList = sharedPreferenceUtils.getLastSearchedList(context)
         if (!lastItemsList.contains(keywordSelected)) {
             if (lastItemsList.size >= MAXIMUM_SIZE_LAST_SEARCHED) {
                 Collections.rotate(lastItemsList, 1)
@@ -26,6 +26,6 @@ class SaveKeyWordInSearchHistoryUseCase @Inject constructor(
             lastItemsList.removeAt(index)
             lastItemsList.add(0, keywordSelected)
         }
-        sharedPreferenceUtils.saveLastSearchedListNewMyDiscount(context, lastItemsList)
+        sharedPreferenceUtils.saveLastSearchedList(context, lastItemsList)
     }
 }

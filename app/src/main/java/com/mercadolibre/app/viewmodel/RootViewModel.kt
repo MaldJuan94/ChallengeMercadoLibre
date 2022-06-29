@@ -79,7 +79,7 @@ class RootViewModel @Inject constructor(
         _stateResult.value = _stateResult.value.copy(loading = loading, type = typeEnum)
     }
 
-    suspend fun onRequestSearch(
+    private suspend fun onRequestSearch(
         key: Int,
         query: String,
         type: String
@@ -115,7 +115,11 @@ class RootViewModel @Inject constructor(
     }
 
     private fun onGetNextKeySearch(data: List<Results>): Int {
-        return _stateResult.value.page + 1
+        return if (data.isEmpty()) {
+            _stateResult.value.page
+        } else {
+            _stateResult.value.page + 1
+        }
     }
 
     private fun onErrorSearch(cause: Throwable?) {
@@ -223,9 +227,9 @@ class RootViewModel @Inject constructor(
         _stateResultProduct.value = ResultProductState()
     }
 
-    fun getSearchProduct(category: String, type: String) {
+    fun callSearchProductPager(query: String, type: String) {
         viewModelScope.launch(dispatcher) {
-            pagerCategories.onLoadNextData(category, type)
+            pagerCategories.onLoadNextData(query, type)
         }
     }
 

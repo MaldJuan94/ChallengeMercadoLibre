@@ -37,7 +37,7 @@ fun ResultScreen(
         }
     } else {
         if (state.data.isEmpty() && !state.endReached && !state.loading) {
-            viewModel.getSearchProduct(query, queryType)
+            viewModel.callSearchProductPager(query, queryType)
         }
     }
 
@@ -92,7 +92,7 @@ fun BodyResult(
             val data = state.data[index]
 
             if (index >= state.data.size - 1 && !state.endReached && !state.loading) {
-                viewModel.getSearchProduct(query, queryType)
+                viewModel.callSearchProductPager(query, queryType)
             }
             ResultItem(result = data,
                 modifier = Modifier.clickable(

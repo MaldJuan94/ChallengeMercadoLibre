@@ -10,15 +10,15 @@ object SharedPreferenceUtils {
         return context.getSharedPreferences("data", Context.MODE_PRIVATE)
     }
 
-    fun saveLastSearchedListNewMyDiscount(context: Context, lastItemList: ArrayList<String>) {
+    fun saveLastSearchedList(context: Context, lastItemList: ArrayList<String>) {
         val saveLastItemList = Gson().toJson(lastItemList)
         getSharedPreferences(context).edit()
-            .putString("lastSearchedListNewMyDiscount", saveLastItemList).apply()
+            .putString("lastSearched", saveLastItemList).apply()
     }
 
-    fun getLastSearchedListNewMyDiscount(context: Context): ArrayList<String> {
+    fun getLastSearchedList(context: Context): ArrayList<String> {
         val lastItemList =
-            getSharedPreferences(context).getString("lastSearchedListNewMyDiscount", "")
+            getSharedPreferences(context).getString("lastSearched", "")
         if (lastItemList.isNullOrEmpty())
             return ArrayList()
         return Gson().fromJson(lastItemList, ArrayList<String>()::class.java)
