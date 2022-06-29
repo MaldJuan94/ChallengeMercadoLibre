@@ -5,7 +5,7 @@ object ApplicationIdentifier {
 }
 
 object Releases {
-    const val versionName = "1.0"
+    const val versionName = "1.0.0"
 
     //Master flavor
     const val versionCodeMaster = 1
