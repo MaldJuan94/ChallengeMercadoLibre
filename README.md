@@ -4,7 +4,7 @@ A demo MercadoLibre simple app using compose and Hilt based on modern Android te
 
 ## Screenshots
 <p align="center">  
-<img src="https://github.com/MaldJuan94/ChallengeMercadoLibre/blob/main/preview/preview.gif?raw=true" width="32%"/>  
+<img src="https://github.com/MaldJuan94/ChallengeMercadoLibre/blob/main/preview/preview.gif?raw=true" height="600" width="300"/>  
 </p>  
 
 ## Tech stack & Open-source libraries
