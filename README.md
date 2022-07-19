@@ -1,7 +1,6 @@
-<h1 align="center">Android Challenge Mercado Libre</h1></br>  
+<h1 align="center">Android Challenge Mercado Libre <img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white" /></h1> </br>   
 <p align="center">    
 A demo MercadoLibre simple app using compose and Hilt based on modern Android tech-stacks and MVVM architecture.  
-
 ## Screenshots
 <p align="center">  
 <img src="https://github.com/MaldJuan94/ChallengeMercadoLibre/blob/main/preview/preview.gif?raw=true" height="600" width="300"/>  
